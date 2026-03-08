@@ -1,0 +1,17 @@
+=== SPLUNK ALERT CONFIGURATION ===
+
+Alert Name: Critical Firewall Alert
+Alert Type: Realtime
+Trigger Condition: Number of Results greater than 0
+Trigger: Per-Result
+Action: Webhook
+
+Webhook URL: http://YOUR_IP:3001/api/v1/hooks/webhook_430c14d9-93eb-48fe-bbd4-05a0a3bc6edd
+
+=== SPLUNK SEARCH QUERY ===
+source="firewall_logs.csv" host="DESKTOP-DDM3ULB" index="main" sourcetype="csv" severity=critical
+
+=== TEST WEBHOOK COMMAND (PowerShell) ===
+$body = '{"src_ip":"192.168.1.200","dst_ip":"203.0.113.100","dst_port":"4444","severity":"critical","rule_name":"Block_Suspicious_Port","country":"CN","action":"blocked"}'
+$url = "http://YOUR_IP:3001/api/v1/hooks/webhook_430c14d9-93eb-48fe-bbd4-05a0a3bc6edd"
+Invoke-RestMethod -Uri $url -Method POST -ContentType "application/json" -Body $body
